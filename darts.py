@@ -5,6 +5,40 @@ import sys
 recogniser = sr.Recognizer()
 mic = sr.Microphone()
 
+def process_speech(speech):
+    if 'brake' in speech:
+        if 'break' in speech:
+            retry = False
+            new_speech = speech.replace('brake', 'break')
+        else:
+            retry = False
+            new_speech = speech
+    elif 'brake' not in speech and 'break' not in speech:
+        retry = True
+        return "error"
+    else:
+        new_speech = speech
+
+    darts = new_speech.split("break")
+    darts = [i.strip(" ") for i in darts]
+
+def get_score(darts):
+    score = 0
+    for i, value in enumerate(darts):
+        if 'triple' in value:
+            score += 3 * int(value.split("triple ")[1])
+        elif 'double' in value:
+            score += 2 * int(value.split("double ")[1])
+        elif value.isdigit():
+            score += int(value)
+        else:
+            if value == 'for':
+                score += 4
+            elif value == 'three':
+                score += 3
+            score = "error"
+    return score
+
 retry = False
 running = 0
 loop_count = 0
@@ -31,35 +65,15 @@ while True:
     speech = recogniser.recognize_google(audio)
     print("\u2714 Speech recorded\n")
 
-    if 'brake' in speech:
-        if 'break' in speech:
-            retry = False
-            new_speech = speech.replace('brake', 'break')
-        else:
-            retry = False
-            new_speech = speech
-    elif 'brake' not in speech and 'break' not in speech:
+    darts = process_speech(speech)
+    if darts == "error":
         retry = True
         continue
-    else:
-        new_speech = speech
 
-    darts = new_speech.split("break")
-    darts = [i.strip(" ") for i in darts]
-    score = 0
-    for i, value in enumerate(darts):
-        if 'triple' in value:
-            score += 3 * int(value.split("triple ")[1])
-        elif 'double' in value:
-            score += 2 * int(value.split("double ")[1])
-        elif value.isdigit():
-            score += int(value)
-        else:
-            if value == 'for':
-                score += 4
-            elif value == 'three':
-                score += 3
-            print("something went wrong")
+    score = get_score(darts)
+    if score == "error":
+        retry = True
+        continue
 
     running += score
     loop_count += 1
@@ -67,11 +81,3 @@ while True:
     print(f"\nDarts thrown: {darts}")
     print(f"Score = {score}")
     print(f"\nRunning total = {running}")
-
-
-# file = sr.AudioFile('harvard.wav')
-# with file as source:
-#     audio = recogniser.record(source)
-
-# x = recogniser.recognize_google(audio)
-# print(x)
