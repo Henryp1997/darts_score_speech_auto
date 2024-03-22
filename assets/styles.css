@@ -1,0 +1,71 @@
+button {
+    margin-right: 0.35rem;
+    margin-top: 0.35rem;
+    width: 4.5rem;
+    height: 5rem;
+    justify-content: center;
+    background-color: #42577d;
+    color: white;
+    border-radius: 15px;
+    border-bottom: 5px solid #333333;
+    border-right: 5px solid #333333;
+    border-top: 5px solid #42577d;
+    border-left: 5px solid #42577d;
+    font-size: 1.5rem
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:active {
+    color: #000;
+    border-bottom: 5px solid #42577d;
+    border-right: 5px solid #42577d;
+    border-top: 5px solid #333333;
+    border-left: 5px solid #333333;
+}
+
+.wider_button {
+    width: 6.9rem
+}
+
+.backspace_button {
+    background-color: #e34040;
+    border-bottom: 5px solid #8d2b2b;
+    border-right: 5px solid #8d2b2b;
+    border-top: 5px solid #e34040;
+    border-left: 5px solid #e34040;
+}
+
+.backspace_button:active {
+    color: #000;
+    border-bottom: 5px solid #e34040;
+    border-right: 5px solid #e34040;
+    border-top: 5px solid #8d2b2b;
+    border-left: 5px solid #8d2b2b;
+}
+
+.confirm_button {
+    width: 8rem;
+    background-color: #3dcb5a;
+    border-bottom: 5px solid #2c9541;
+    border-right: 5px solid #2c9541;
+    border-top: 5px solid #3dcb5a;
+    border-left: 5px solid #3dcb5a;
+}
+
+.confirm_button:active {
+    border-bottom: 5px solid #3dcb5a;
+    border-right: 5px solid #3dcb5a;
+    border-top: 5px solid #2c9541;
+    border-left: 5px solid #2c9541;
+}
+
+.confirm_button:disabled {
+    background-color: #888888;
+    border-bottom: 5px solid #444444;
+    border-right: 5px solid #444444;
+    border-top: 5px solid #888888;
+    border-left: 5px solid #888888;
+}
