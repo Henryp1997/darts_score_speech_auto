@@ -20,7 +20,9 @@ def write_darts_to_file(d1, d2, d3):
     darts = [d1, d2, d3]
     if 'Bull' in darts:
         darts[darts.index('Bull')] = 50
-    total = sum([int(i) for i in darts])
+
+    total = sum([int(i) for i in [convert_score(d1), convert_score(d2), convert_score(d3)]])
+
     with open(csv_file, "a") as f:
         f.write(f"\n{now}, {darts[0]}, {darts[1]}, {darts[2]}, {total}")
 
