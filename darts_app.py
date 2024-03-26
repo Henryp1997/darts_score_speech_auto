@@ -12,7 +12,7 @@ app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = 'Darts score recorder'
 
 def write_darts_to_file(d1, d2, d3):
-    csv_file = f"{os.path.dirname(os.path.realpath(__file__))}/darts_record.csv"
+    csv_file = f"{os.path.dirname(os.path.realpath(__file__))}/t20_practice.csv"
     now = datetime.strftime(datetime.now(), "%Y-%m-%d")
     darts = [d1, d2, d3]
     if 'Bull' in darts:
@@ -127,7 +127,7 @@ def init_avg_file(n):
     # use btn1 as an input but only trigger this callback once - on page load
     trigger = dash.callback_context.triggered[0]['prop_id']
     if trigger == ".":
-        df = pd.read_csv(f"{os.path.dirname(os.path.realpath(__file__))}/darts_record.csv")
+        df = pd.read_csv(f"{os.path.dirname(os.path.realpath(__file__))}/t20_practice.csv")
         n_visits = len(df)
         avg = float("%.2f" % df['Total'].mean())
         if math.isnan(avg):
