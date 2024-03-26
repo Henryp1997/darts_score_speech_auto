@@ -1,20 +1,22 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import collections
+import os
 
-df = pd.read_csv("t20_practice.csv")
+df = pd.read_csv(f"{os.path.dirname(os.path.realpath(__file__))}/t20_practice.csv")
 
+# order list how scores appear on dart board
 sngl_scores = ['0', '3', '19', '7', '16', '8', '11', '14', '9', '12', '5', '20', '1', '18', '4', '13', '6', '10', '15', '2', '17', '25', '50']
-dbl_scores = [f'D{i}' for i in sngl_scores if i != "0" and '25' not in i and 'Bull' not in i]
-tbl_scores = [f'T{i}' for i in sngl_scores if i != "0" and '25' not in i and 'Bull' not in i]
+dbl_scores = [f'D{i}' for i in sngl_scores if i != "0" and i not in ("25", "50")]
+tbl_scores = [f'T{i}' for i in sngl_scores if i != "0" and i not in ("25", "50")]
        
 score_sets = [sngl_scores, dbl_scores, tbl_scores]
 
 # get thrown darts
 all_darts = [i.strip(" ") for i in list(df['Dart1']) + list(df['Dart2']) + list(df['Dart3'])]
 all_sngl = [i for i in all_darts if 'T' not in i and 'D' not in i]
-all_dbl = [i for i in all_darts if 'D' in i and i not in ("0", "25", "50")]
-all_tbl = [i for i in all_darts if 'T' in i and i not in ("0", "25", "50")]
+all_dbl = [i for i in all_darts if 'D' in i]
+all_tbl = [i for i in all_darts if 'T' in i]
 
 fig, ax = plt.subplots()
 
@@ -32,7 +34,7 @@ for i, scores in enumerate([all_sngl, all_dbl, all_tbl]):
     freq = [i[1] for i in freq]
 
     if i > 0:
-        freq += [0, 0] # add 0 25s and 0 50s for plotting doubles and trebles
+        freq += [0, 0, 0] # add 0 zeros, 0 25s and 0 50s for plotting doubles and trebles
 
     # plot with same x axis
     ax.bar(score_sets[0], freq, color=colours[i], label=names[i], edgecolor="black", zorder=2)
