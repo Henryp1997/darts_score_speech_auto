@@ -1,3 +1,7 @@
+body {
+    background-color: #000
+}
+
 button {
     margin-right: 0.35rem;
     margin-top: 0.35rem;
@@ -6,7 +10,7 @@ button {
     justify-content: center;
     background-color: #42577d;
     color: white;
-    border-radius: 15px;
+    border-radius: 10px;
     border-bottom: 5px solid #333333;
     border-right: 5px solid #333333;
     border-top: 5px solid #42577d;

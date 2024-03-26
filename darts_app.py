@@ -1,12 +1,9 @@
 import dash
-from dash import dcc
 from dash import html
 from dash import no_update as nop
 import dash_bootstrap_components as dbc
 from dash.dependencies import Output, Input, State
-from dash.exceptions import PreventUpdate
 import math
-import numpy as np
 import os
 import pandas as pd
 from datetime import datetime
@@ -56,28 +53,39 @@ def convert_score(value):
 def update_layout():
     body = dbc.Container([
         html.Div(id="hidden_div1", style={"display": "none"}),
+        html.Div("0", id="n_visits", style={"display": "none"}),
         html.Div(style={"height": "1rem"}),
         html.Div([
-            html.Div(style={"width": "0.5rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-right": "none"}),
-            html.Div("Current visit: ", style={"line-height": "3rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div(style={"width": "2rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div("Darts:", style={"line-height": "3rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div(style={"width": "1rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div("_____", id="dart_1", style={"line-height": "3rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div(style={"width": "1rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div("_____", id="dart_2", style={"line-height": "3rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div(style={"width": "1rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div("_____", id="dart_3", style={"line-height": "3rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div(style={"width": "3.3rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none"}),
-        ]),
+            html.Div(style={"height": "0.5rem"}),
+            html.Div("..", style={"color": "black", "display": "inline-block"}),
+            html.Div("Darts:", style={"color": "white", "display": "inline-block"}),
+            html.Div("......", style={"color": "black", "display": "inline-block"}),
+            html.Div("_____", id="dart_1", style={"color": "white", "display": "inline-block"}),
+            html.Div("......", style={"color": "black", "display": "inline-block"}),
+            html.Div("_____", id="dart_2", style={"color": "white", "display": "inline-block"}),
+            html.Div("......", style={"color": "black", "display": "inline-block"}),
+            html.Div("_____", id="dart_3", style={"color": "white", "display": "inline-block"}),
+            html.Div(style={"height": "0.5rem"}),
+        ], style={"border": "2px solid #fff"}),
+        html.Div(style={"height": "0.5rem"}),
         html.Div([
-            html.Div(style={"height": "1rem"}),
-            html.Div(style={"width": "0.5rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-right": "none"}),
-            html.Div("3-dart average: ", style={"line-height": "3rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div(style={"width": "2rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div("_____", id="3_dart_avg", style={"line-height": "3rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none", "border-right": "none"}),
-            html.Div(style={"width": "12.4rem", "margin-bottom": "-1.1rem", "height": "3rem", "display": "inline-block", "border": "0.1rem solid #000", "border-left": "none"}),
-        ]),
+            html.Div(style={"height": "0.5rem"}),
+            html.Div("..", style={"color": "black", "display": "inline-block"}),
+            html.Div("3-dart average (current session):", style={"color": "white", "display": "inline-block"}),
+            html.Div("......", style={"color": "black", "display": "inline-block"}),
+            html.Div("_____", id="3_dart_avg_current", style={"color": "white", "display": "inline-block"}),
+            html.Div(style={"height": "0.5rem"}),
+        ], style={"border": "2px solid #fff"}),
+        html.Div(style={"height": "0.5rem"}),
+        html.Div([
+            html.Div(style={"height": "0.5rem"}),
+            html.Div("..", style={"color": "black", "display": "inline-block"}),
+            html.Div("3-dart average (all time):", style={"color": "white", "display": "inline-block"}),
+            html.Div("......", style={"color": "black", "display": "inline-block"}),
+            html.Div("_____", id="3_dart_avg", style={"color": "white", "display": "inline-block"}),
+            html.Div(style={"height": "0.5rem"}),
+        ], style={"border": "2px solid #fff"}),
+        html.Div(style={"height": "0.5rem"}),
         html.Div([
             html.Div([
                 html.Div([
@@ -122,7 +130,10 @@ def init_avg_file(n):
         df = pd.read_csv(f"{os.path.dirname(os.path.realpath(__file__))}/darts_record.csv")
         n_visits = len(df)
         avg = float("%.2f" % df['Total'].mean())
-        return update_3_dart_avg_file(n_visits, avg)
+        if math.isnan(avg):
+            avg = "0"
+        update_3_dart_avg_file(n_visits, avg)
+        return str(avg)
     return nop
 
 @app.callback(
@@ -130,17 +141,23 @@ def init_avg_file(n):
     Input("btn_1", "children"),
     Input("btn_double", "n_clicks"),
     Input("btn_treble", "n_clicks"),
+    *[Input(f"btn_{i}", "n_clicks") for i in range(1, 21)],
     prevent_initial_call=True
 )
-def double_treble_text(btn_1_text, n_double, n_treble):
+def double_treble_text(btn_1_text, n_double, n_treble, *btns):
     trigger = dash.callback_context.triggered[0]['prop_id']
     if "double" in trigger:
         if "D" in btn_1_text:
             return [f"{i}" for i in range(1, 21)]
         return [f"D{i}" for i in range(1, 21)]
-    if "T" in btn_1_text:
-        return [f"{i}" for i in range(1, 21)]
-    return [f"T{i}" for i in range(1, 21)]
+    elif "treble" in trigger:
+        if "T" in btn_1_text:
+            return [f"{i}" for i in range(1, 21)]
+        return [f"T{i}" for i in range(1, 21)]
+      
+    # below code executed if one of the number buttons triggered this callback
+    # just returns the button texts to non double or treble after each input
+    return [f"{i}" for i in range(1, 21)]
 
 @app.callback(
     Output("dart_1", "children"),
@@ -188,6 +205,23 @@ def record_all_3_darts(n_confirm, d1, d2, d3):
     return "_____", "_____", "_____"
 
 @app.callback(
+    Output("dart_1", "children", allow_duplicate=True),
+    Output("dart_2", "children", allow_duplicate=True),
+    Output("dart_3", "children", allow_duplicate=True),
+    Input("btn_backspace", "n_clicks"),
+    State("dart_1", "children"),
+    State("dart_2", "children"),
+    State("dart_3", "children"),
+    prevent_initial_call=True
+)
+def delete_dart_input(n_backspace, d1, d2, d3):
+    if d3 != "_____":
+        return nop, nop, "_____"
+    if d2 != "_____":
+        return nop, "_____", "_____"
+    return "_____", "_____", "_____"
+
+@app.callback(
     Output("btn_confirm", "disabled"),
     Input("dart_3", "children"),
     State("dart_1", "children"),
@@ -198,6 +232,28 @@ def enable_confirm_btn(dart_3, dart_1, dart_2):
     return dart_3 == "_____"
     
 @app.callback(
+    Output("3_dart_avg_current", "children"),
+    Output("n_visits", "children"),
+    Input("btn_confirm", "n_clicks"),
+    State("3_dart_avg_current", "children"),
+    State("n_visits", "children"),
+    State("dart_1", "children"),
+    State("dart_2", "children"),
+    State("dart_3", "children"),
+    prevent_initial_call=True
+)
+def record_3_dart_avg(n_confirm, curr_avg, n_visits, dart_1, dart_2, dart_3):
+    dart_1 = convert_score(dart_1)
+    dart_2 = convert_score(dart_2)
+    dart_3 = convert_score(dart_3)
+
+    curr_avg = 0 if curr_avg == "_____" else int(curr_avg)
+    n_visits = int(n_visits)
+    new_avg = float("%.2f" % (((n_visits * curr_avg) + (dart_1 + dart_2 + dart_3)) / (n_visits + 1)))
+
+    return new_avg, str(n_visits + 1)
+
+@app.callback(
     Output("3_dart_avg", "children", allow_duplicate=True),
     Input("btn_confirm", "n_clicks"),
     State("dart_1", "children"),
@@ -205,18 +261,18 @@ def enable_confirm_btn(dart_3, dart_1, dart_2):
     State("dart_3", "children"),
     prevent_initial_call=True
 )
-def record_3_dart_avg(n_confirm, dart_1, dart_2, dart_3):
+def record_3_dart_avg_all_time(n_confirm, dart_1, dart_2, dart_3):
     dart_1 = convert_score(dart_1)
     dart_2 = convert_score(dart_2)
     dart_3 = convert_score(dart_3)
 
     n_visits = read_3_dart_avg(avg=False)
-    current_avg = read_3_dart_avg()
-    new_avg = float("%.2f" % (((n_visits * current_avg) + (dart_1 + dart_2 + dart_3)) / (n_visits + 1)))
+    curr_avg = read_3_dart_avg()
+    new_avg = float("%.2f" % (((n_visits * curr_avg) + (dart_1 + dart_2 + dart_3)) / (n_visits + 1)))
 
     update_3_dart_avg_file(n_visits + 1, new_avg)
 
     return new_avg
 
 if __name__ == "__main__":
-    app.run_server(debug=True, host='0.0.0.0', port=5000)
+    app.run_server(debug=False, host='0.0.0.0', port=5000)
